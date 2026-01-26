@@ -34,12 +34,12 @@ public class RepositorioCompraTest {
     @Test
     public void testQueSePuedaGuardarUnaCompra() {
         Compra compra1=new Compra(TipoMoneda.DOLAR, 100.0);
-        repositorioCompra.guardar(compra1);
 
-        assertThat(compra1.getId(), org.hamcrest.Matchers.notNullValue());
-        Assertions.assertEquals(TipoMoneda.DOLAR, compra1.getTipoMoneda());
-        Assertions.assertEquals(100.0, compra1.getCantidad());
+        Compra guardada=repositorioCompra.guardarCompra(compra1);
+
+        assertThat(guardada.getId(), org.hamcrest.Matchers.notNullValue());
+        Assertions.assertEquals(TipoMoneda.DOLAR, guardada.getTipoMoneda());
+        Assertions.assertEquals(100.0, guardada.getCantidad());
     }
-
 
 }

@@ -1,5 +1,5 @@
 package com.tallerwebi.dominio;
 
-public interface RepositorioCompra {
+public interface ServicioCompra {
     Compra guardarCompra(Compra compra);
 }

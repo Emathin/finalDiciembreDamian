@@ -18,8 +18,9 @@ public class RepositorioCompraImpl implements RepositorioCompra {
     }
 
     @Override
-    public void guardar(Compra compra) {
+    public Compra guardarCompra(Compra compra) {
         Session session=sessionFactory.getCurrentSession();
         session.save(compra);
+        return compra;
     }
 }
