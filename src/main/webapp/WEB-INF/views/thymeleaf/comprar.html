@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Comprar</title>
+</head>
+<body>
+<header>
+    <h1>Realizar compra</h1>
+</header>
+
+    <form th:action="@{/guardar}" th:object="${compra}" method="post" >
+        <label for="moneda" >Moneda:</label>
+        <select th:field="*{tipoMoneda}" id="moneda">
+            <option value="DOLAR" >DOLAR</option>
+            <option value="EURO" >EURO</option>
+        </select>
+        <br><br>
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" th:field="*{cantidad}" id="cantidad" placeholder="ingrese el monto de pesos a comprar"><br><br>
+        <input type="submit" value="Comprar">
+    </form>
+
+<footer>
+    <p>Orieta Emmanuel David</p>
+    <p>D.N.I.: 34.409.322</p>
+</footer>
+</body>
+</html>
