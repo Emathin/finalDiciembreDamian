@@ -24,6 +24,12 @@ public class Compra{
 
     }
 
+    public Compra(long l, TipoMoneda tipoMoneda, double v) {
+        this.id = l;
+        this.tipoMoneda = tipoMoneda;
+        this.cantidad = v;
+    }
+
 
     public Long getId() {
         return id;
