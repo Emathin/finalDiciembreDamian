@@ -3,21 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Comprar</title>
+    <link>
 </head>
 <body>
 <header>
     <h1>Realizar compra</h1>
 </header>
 
-    <form th:action="@{/guardar}" th:object="${compra}" method="post" >
-        <label for="moneda" >Moneda:</label>
-        <select th:field="*{tipoMoneda}" id="moneda">
-            <option value="DOLAR" >DOLAR</option>
-            <option value="EURO" >EURO</option>
-        </select>
-        <br><br>
-        <label for="cantidad">Cantidad:</label>
-        <input type="number" th:field="*{cantidad}" id="cantidad" placeholder="ingrese el monto de pesos a comprar"><br><br>
+    <form th:action="@{/guardar}" th:object="${compraDTO}" method="post" >
+        <label for="cantidad">Divisas a comprar:</label>
+        <input type="number" th:field="*{compra.cantidad}" id="cantidad" placeholder="Cantidad de divisas a comprar" required><br><br>
+        <input type="submit" value="Consultar cotización" th:formaction="@{/consultarCotizacion}"><br>
+        <div th:if="${pesosEstimados != null}">
+            <p style="color: green; font-weight: bold;">
+                Pesos requeridos: <span th:text="${pesosEstimados}"></span> ARS
+            </p>
+        </div>
+        <p>Moneda:</p>
+        <input type="radio" th:field="*{cotizacion.tipoMoneda}" value="DOLAR" id="dolar" >
+        <label for="dolar">DOLAR</label>
+        <br>
+        <input type="radio" th:field="*{cotizacion.tipoMoneda}" value="EURO" id="euro">
+        <label for="euro">EURO</label>
+        <br>
+        <br>
         <input type="submit" value="Comprar">
     </form>
 

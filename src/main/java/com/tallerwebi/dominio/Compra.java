@@ -1,50 +1,28 @@
 package com.tallerwebi.dominio;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-public class Compra{
+public class Compra {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private TipoMoneda tipoMoneda;
     private Double cantidad;
-    private Double cotizacion;
-
-    public Compra(TipoMoneda tipoMoneda, Double cantidad) {
-        this.tipoMoneda = tipoMoneda;
-        this.cantidad = cantidad;
-    }
+    @ManyToOne
+    @JoinColumn(name = "cotizacion_id_cotizacion")
+    private Cotizacion cotizacion;
+    private Double precioPagado;
 
     public Compra() {
 
     }
-
-    public Compra(long l, TipoMoneda tipoMoneda, double v) {
-        this.id = l;
-        this.tipoMoneda = tipoMoneda;
-        this.cantidad = v;
-    }
-
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public TipoMoneda getTipoMoneda() {
-        return tipoMoneda;
-    }
-
-    public void setTipoMoneda(TipoMoneda tipoMoneda) {
-        this.tipoMoneda = tipoMoneda;
     }
 
     public Double getCantidad() {
@@ -55,11 +33,18 @@ public class Compra{
         this.cantidad = cantidad;
     }
 
-    public Double getCotizacion() {
+    public Cotizacion getCotizacion() {
         return cotizacion;
     }
 
-    public void setCotizacion(Double cotizacion) {
+    public void setCotizacion(Cotizacion cotizacion) {
         this.cotizacion = cotizacion;
+    }
+
+    public Double getPrecioPagado() {
+        return precioPagado;
+    }
+    public void setPrecioPagado(Double precioPagado) {
+        this.precioPagado = precioPagado;
     }
 }

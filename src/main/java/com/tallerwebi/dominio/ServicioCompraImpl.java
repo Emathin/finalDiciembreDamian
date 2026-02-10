@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.presentacion.CompraDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,13 +11,22 @@ public class ServicioCompraImpl implements ServicioCompra {
     private RepositorioCompra repositorioCompra;
 
     @Autowired
-    public ServicioCompraImpl(RepositorioCompra repositorioCompra) {
-        this.repositorioCompra = repositorioCompra;
-    }
+    private RepositorioCotizacion repositorioCotizacion;
 
+    @Autowired
+    public ServicioCompraImpl(RepositorioCompra repositorioCompra, RepositorioCotizacion repositorioCotizacion) {
+        this.repositorioCompra = repositorioCompra;
+        this.repositorioCotizacion = repositorioCotizacion;
+    }
     @Override
     public Compra guardarCompra(Compra compra) {
         repositorioCompra.guardarCompra(compra);
         return compra;
+    }
+
+    @Override
+    public Double calcularCotizacion(CompraDTO compraFormulario) {
+        return repositorioCotizacion.obtenerCotizacion(compraFormulario.getCotizacion().getTipoMoneda())
+        *compraFormulario.getCompra().getCantidad();
     }
 }

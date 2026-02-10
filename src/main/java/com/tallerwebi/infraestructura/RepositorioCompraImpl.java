@@ -2,6 +2,7 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.Compra;
 import com.tallerwebi.dominio.RepositorioCompra;
+import com.tallerwebi.dominio.TipoMoneda;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,9 @@ public class RepositorioCompraImpl implements RepositorioCompra {
 
     @Autowired
     public RepositorioCompraImpl(SessionFactory sessionFactory) {
+
         this.sessionFactory = sessionFactory;
+
     }
 
     @Override
@@ -26,4 +29,6 @@ public class RepositorioCompraImpl implements RepositorioCompra {
         session.save(compra);
         return compra;
     }
+
+
 }
