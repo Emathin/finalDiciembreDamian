@@ -6,10 +6,7 @@ import com.tallerwebi.dominio.ServicioCompra;
 import com.tallerwebi.dominio.TipoMoneda;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ControladorCompra {
@@ -48,10 +45,9 @@ public class ControladorCompra {
 
     @PostMapping("/consultarCotizacion")
     public ModelAndView consultar(@ModelAttribute("compraDTO") CompraDTO compraDto) {
+        // Si esto imprime null, el problema es el HTML
+        System.out.println("Moneda: " + (compraDto.getCotizacion() != null ? compraDto.getCotizacion().getTipoMoneda() : "Objeto Cotizacion nulo"));
         ModelAndView mav = new ModelAndView("comprar");
-
-        // Aquí tu lógica: obtener valor de la moneda y calcular
-        // Ejemplo:
         Double valorMoneda = servicioCompra.calcularCotizacion(compraDto); // Esto vendría de tu servicio de cotizaciones
         Double resultado = compraDto.getCompra().getCantidad() * valorMoneda;
 

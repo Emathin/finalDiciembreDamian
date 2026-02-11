@@ -20,52 +20,14 @@ public class RepositorioCotizacionImpl implements RepositorioCotizacion {
      public RepositorioCotizacionImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-/*
-    @Override
-    public Double obtenerCotizacion(TipoMoneda tipoMoneda) {
-        Session sesion=sessionFactory.getCurrentSession();
-        return   sesion.createQuery("SELECT c.valor FROM Cotizacion c WHERE UPPER(c.tipoMoneda) = UPPER(:tipoMoneda)", Double.class)
-                .setParameter("tipoMoneda", tipoMoneda)
-                .getSingleResult();
-    }
 
     @Override
     public Double obtenerCotizacion(TipoMoneda tipoMoneda) {
-        Session sesion = sessionFactory.getCurrentSession();
-        return sesion.createQuery(
-                        "SELECT c.valor FROM Cotizacion c WHERE c.tipoMoneda = :tipoMoneda", Double.class)
-                .setParameter("tipoMoneda", tipoMoneda) // Hibernate se encarga de la conversión
-                .getSingleResult();
-    }
-    @Override
-    public Double obtenerCotizacion(TipoMoneda tipoMoneda) {
-        Session sesion = sessionFactory.getCurrentSession();
-        return sesion.createQuery(
-                        "SELECT c.valor FROM Cotizacion c WHERE c.tipoMoneda = :tipo", Double.class)
-                .setParameter("tipo", tipoMoneda) // Hibernate debería convertirlo, pero...
-                .getSingleResult();
-    }
-
-    @Override
-    public Double obtenerCotizacion(TipoMoneda tipoMoneda) {
-        Session sesion = sessionFactory.getCurrentSession();
-        return sesion.createQuery(
-
-                        "SELECT c.valor FROM Cotizacion c WHERE CAST(c.tipoMoneda AS string) = :tipo", Double.class)
-                .setParameter("tipo", tipoMoneda.toString())
-                .getSingleResult();
-    }*/
-
-    @Override
-    public Double obtenerCotizacion(TipoMoneda tipoMoneda) {
-        Session sesion = sessionFactory.getCurrentSession();
-
-        // Pasamos el enum a String para la comparación
-        String monedaBusqueda = tipoMoneda.name();
-
-        return sesion.createQuery(
-                        "SELECT c.valor FROM Cotizacion c WHERE STR(c.tipoMoneda) LIKE :tipo", Double.class)
-                .setParameter("tipo", "%" + monedaBusqueda + "%")
+        // Al ser un examen, usamos la forma más directa y limpia
+        return sessionFactory.getCurrentSession()
+                // Variante en el Repositorio si lo anterior falla
+                .createQuery("SELECT c.valor FROM Cotizacion c WHERE c.tipoMoneda = :tipo", Double.class)
+                .setParameter("tipo", tipoMoneda.name()) // .name() devuelve "DOLAR" como String puro
                 .getSingleResult();
     }
     @Override

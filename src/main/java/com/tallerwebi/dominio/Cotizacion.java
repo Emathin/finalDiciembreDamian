@@ -17,11 +17,22 @@ public class Cotizacion {
         this.tipoMoneda = tipoMoneda;
         this.valor = valor;
     }
+
     public TipoMoneda getTipoMoneda() {
         return tipoMoneda;
+    }
+
+    public void setTipoMoneda(TipoMoneda tipoMoneda) {
+        this.tipoMoneda = tipoMoneda;
     }
 
     public Double getValor() {
         return valor;
     }
+
+    public void setValor(Double valor) {
+        this.valor = valor;
+    }
 }
+
+
