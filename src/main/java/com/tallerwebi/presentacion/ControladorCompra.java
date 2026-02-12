@@ -27,7 +27,7 @@ public class ControladorCompra {
     }
 
     @RequestMapping("/guardar")
-    public ModelAndView guardarCompra(Compra compraFormulario) {
+    public ModelAndView guardarCompra(CompraDTO compraFormulario) {
         Compra compraPersistida= servicioCompra.guardarCompra(compraFormulario);
         ModelAndView mav=new ModelAndView("compraGuardada");
         mav.addObject("compra",compraPersistida);
@@ -36,7 +36,7 @@ public class ControladorCompra {
 
     @PostMapping("/calcularPesosRequeridos")
     public ModelAndView calcularPesosRequeridos(@ModelAttribute("compra") CompraDTO compraFormulario) {
-    Double resultado=servicioCompra.calcularCotizacion(compraFormulario);
+    Double resultado=servicioCompra.obtenerCotizacion(compraFormulario);
     ModelAndView mav=new ModelAndView("comprar");
     mav.addObject("compra",compraFormulario);
     mav.addObject("pesosEstimados",resultado);
@@ -48,8 +48,8 @@ public class ControladorCompra {
         // Si esto imprime null, el problema es el HTML
         System.out.println("Moneda: " + (compraDto.getCotizacion() != null ? compraDto.getCotizacion().getTipoMoneda() : "Objeto Cotizacion nulo"));
         ModelAndView mav = new ModelAndView("comprar");
-        Double valorMoneda = servicioCompra.calcularCotizacion(compraDto); // Esto vendría de tu servicio de cotizaciones
-        Double resultado = compraDto.getCompra().getCantidad() * valorMoneda;
+        Double valorMoneda = servicioCompra.obtenerCotizacion(compraDto); // Esto vendría de tu servicio de cotizaciones
+        Double resultado = compraDto.getCompra().getCantidadDeDivisasCompradas() * valorMoneda;
 
         mav.addObject("pesosEstimados", resultado);
         mav.addObject("compraDTO", compraDto); // Devolvemos el objeto para mantener los datos en los inputs

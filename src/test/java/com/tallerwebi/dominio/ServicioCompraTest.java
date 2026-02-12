@@ -27,13 +27,14 @@ public class ServicioCompraTest {
     @Test
     public void queSePuedaCrearUnaCompra(){
 
-        Compra compraModelo = new Compra();
+        CompraDTO compraDTO = new CompraDTO();
+        Compra compra=new Compra();
 
-        when(repositorioCompra.guardarCompra(compraModelo)).thenReturn(compraModelo);
+        when(repositorioCompra.guardarCompra(compra)).thenReturn(compra);
 
-        servicioCompra.guardarCompra(compraModelo);
+        servicioCompra.guardarCompra(compraDTO);
 
-        verify(repositorioCompra,times(1)).guardarCompra(compraModelo);
+        verify(repositorioCompra,times(1)).guardarCompra(compra);
     }
 
     @Test
@@ -46,11 +47,11 @@ public class ServicioCompraTest {
         compraDTO.setCotizacion(cotizacionModelo);
 
         compraModelo.setCotizacion(cotizacionModelo);
-        compraModelo.setCantidad(1000.00);
+        compraModelo.setCantidadDeDivisasCompradas(1000.00);
 
         when(repositorioCotizacion.obtenerCotizacion(TipoMoneda.DOLAR)).thenReturn(200.00);
 
-        Double cotizacion=servicioCompra.calcularCotizacion(compraDTO);
+        Double cotizacion=servicioCompra.obtenerCotizacion(compraDTO);
 
         verify(repositorioCotizacion,times(1)).obtenerCotizacion(TipoMoneda.DOLAR);
         assertEquals(200000.00,cotizacion);

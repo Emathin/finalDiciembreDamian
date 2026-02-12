@@ -8,7 +8,7 @@ public class Compra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Double cantidad;
+    private Double cantidadDeDivisasCompradas;
     @ManyToOne
     @JoinColumn(name = "cotizacion_id_cotizacion")
     private Cotizacion cotizacion;
@@ -25,12 +25,12 @@ public class Compra {
         this.id = id;
     }
 
-    public Double getCantidad() {
-        return cantidad;
+    public Double getCantidadDeDivisasCompradas() {
+        return cantidadDeDivisasCompradas;
     }
 
-    public void setCantidad(Double cantidad) {
-        this.cantidad = cantidad;
+    public void setCantidadDeDivisasCompradas(Double cantidad) {
+        this.cantidadDeDivisasCompradas = cantidad;
     }
 
     public Cotizacion getCotizacion() {

@@ -29,17 +29,19 @@ public class ControladorCompraTest {
     public void queSePuedaGuardarUnaCompraYMostrarla(){
         //Preparacion
         Compra compraFormulario=new Compra();
-        Cotizacion cotizacionFormulario=new Cotizacion(TipoMoneda.DOLAR,200.00);
-        Compra compraPersistida=new Compra();
-        compraFormulario.setCotizacion(cotizacionFormulario);
-        compraPersistida.setCotizacion(cotizacionFormulario);
-        when(servicioCompra.guardarCompra(compraFormulario)).thenReturn(compraPersistida);
+        Cotizacion cotizacionFormulario=new Cotizacion();
+        CompraDTO compraEnBlancoDTO=new CompraDTO();
+        CompraDTO compraPersistidaDTO=new CompraDTO();
+        compraPersistidaDTO.setCotizacion(cotizacionFormulario);
+        compraPersistidaDTO.setCompra(compraFormulario);
+
+        when(servicioCompra.guardarCompra(compraEnBlancoDTO)).thenReturn(compraPersistidaDTO);
 
         //Ejecucion
-        ModelAndView mav=controladorCompra.guardarCompra(compraFormulario);
+        ModelAndView mav=controladorCompra.guardarCompra(compraEnBlancoDTO);
 
         //Contrastacion
-        assertEquals(compraPersistida,mav.getModel().get("compra"));
+        assertEquals(compraPersistidaDTO,mav.getModel().get("compra"));
         assertEquals("compraGuardada",mav.getViewName());
     }
 
@@ -57,7 +59,7 @@ public class ControladorCompraTest {
             compraDTO.setCompra(compraFormulario);
             compraDTO.setCotizacion(cotizacion);
 
-            when(servicioCompra.calcularCotizacion(compraDTO)).thenReturn(cantidadPesosRequeridos);
+            when(servicioCompra.obtenerCotizacion(compraDTO)).thenReturn(cantidadPesosRequeridos);
 
         //Ejecucion
         ModelAndView mav=controladorCompra.calcularPesosRequeridos(compraDTO);

@@ -4,7 +4,6 @@ import com.tallerwebi.dominio.Compra;
 import com.tallerwebi.dominio.Cotizacion;
 
 public class CompraDTO {
-
     private Compra compra;
     private Cotizacion cotizacion;
 

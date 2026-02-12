@@ -23,11 +23,9 @@ public class RepositorioCotizacionImpl implements RepositorioCotizacion {
 
     @Override
     public Double obtenerCotizacion(TipoMoneda tipoMoneda) {
-        // Al ser un examen, usamos la forma más directa y limpia
         return sessionFactory.getCurrentSession()
-                // Variante en el Repositorio si lo anterior falla
                 .createQuery("SELECT c.valor FROM Cotizacion c WHERE c.tipoMoneda = :tipo", Double.class)
-                .setParameter("tipo", tipoMoneda.name()) // .name() devuelve "DOLAR" como String puro
+                .setParameter("tipo", tipoMoneda)
                 .getSingleResult();
     }
     @Override

@@ -3,7 +3,7 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.presentacion.CompraDTO;
 
 public interface ServicioCompra {
-    Compra guardarCompra(Compra compra);
+    CompraDTO guardarCompra(CompraDTO compraDTO);
 
-    Double calcularCotizacion(CompraDTO compraFormulario);
+    Double obtenerCotizacion(CompraDTO compraFormularioDTO);
 }
