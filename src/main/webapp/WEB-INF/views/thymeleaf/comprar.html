@@ -12,18 +12,19 @@
 
     <form th:action="@{/guardar}" th:object="${compraDTO}" method="post" >
         <label for="cantidad">Divisas a comprar:</label>
-        <input type="number" th:field="*{compra.cantidad}" id="cantidad" placeholder="Cantidad de divisas a comprar" required><br><br>
+        <input type="number" th:field="*{compra.cantidadDeDivisasCompradas}" id="cantidad" placeholder="Cantidad de divisas a comprar" required><br><br>
         <input type="submit" value="Consultar cotización" th:formaction="@{/consultarCotizacion}"><br>
-        <div th:if="${pesosEstimados != null}">
+        <div th:if="*{compra.precioPagado != null}">
             <p style="color: green; font-weight: bold;">
-                Pesos requeridos: <span th:text="${pesosEstimados}"></span> ARS
+                Pesos requeridos: <span th:text="*{compra.precioPagado}"></span> ARS
             </p>
+            <input type="hidden" th:field="*{compra.precioPagado}">
         </div>
         <p>Moneda:</p>
-        <input type="radio" name="cotizacion.tipoMoneda" value="DOLAR" id="dolar">
+        <input type="radio" th:field="*{cotizacion.tipoMoneda}" value="DOLAR" id="dolar">
         <label for="dolar">DOLAR</label>
         <br>
-        <input type="radio" name="cotizacion.tipoMoneda" value="EURO" id="euro">
+        <input type="radio" th:field="*{cotizacion.tipoMoneda}" value="EURO" id="euro">
         <label for="euro">EURO</label>
         <br>
         <br>

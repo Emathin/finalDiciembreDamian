@@ -28,6 +28,14 @@ public class RepositorioCotizacionImpl implements RepositorioCotizacion {
                 .setParameter("tipo", tipoMoneda)
                 .getSingleResult();
     }
+
+    @Override
+    public Cotizacion obtenerCotizacionCompleta(TipoMoneda tipoMoneda) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("FROM Cotizacion c WHERE c.tipoMoneda = :tipo", Cotizacion.class)
+                .setParameter("tipo", tipoMoneda)
+                .getSingleResult();
+    }
     @Override
     public void guardarCotizacion(Cotizacion cotizacion1) {
         Session sesion=sessionFactory.getCurrentSession();

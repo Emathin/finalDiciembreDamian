@@ -1,9 +1,7 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Compra;
-import com.tallerwebi.dominio.Cotizacion;
-import com.tallerwebi.dominio.ServicioCompra;
-import com.tallerwebi.dominio.TipoMoneda;
+import com.tallerwebi.dominio.*;
+import com.tallerwebi.infraestructura.RepositorioCotizacionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class ControladorCompra {
 @Autowired
     private final ServicioCompra servicioCompra;
+
+    @Autowired
+    private RepositorioCotizacion repositorioCotizacionImpl;
 
     @Autowired
     public ControladorCompra(ServicioCompra servicioCompra) {
@@ -28,9 +29,9 @@ public class ControladorCompra {
 
     @RequestMapping("/guardar")
     public ModelAndView guardarCompra(CompraDTO compraFormulario) {
-        Compra compraPersistida= servicioCompra.guardarCompra(compraFormulario);
+        CompraDTO compraPersistida= servicioCompra.guardarCompra(compraFormulario);
         ModelAndView mav=new ModelAndView("compraGuardada");
-        mav.addObject("compra",compraPersistida);
+        mav.addObject("compraDTO",compraPersistida);
         return mav;
     }
 
@@ -45,14 +46,11 @@ public class ControladorCompra {
 
     @PostMapping("/consultarCotizacion")
     public ModelAndView consultar(@ModelAttribute("compraDTO") CompraDTO compraDto) {
-        // Si esto imprime null, el problema es el HTML
         System.out.println("Moneda: " + (compraDto.getCotizacion() != null ? compraDto.getCotizacion().getTipoMoneda() : "Objeto Cotizacion nulo"));
         ModelAndView mav = new ModelAndView("comprar");
-        Double valorMoneda = servicioCompra.obtenerCotizacion(compraDto); // Esto vendría de tu servicio de cotizaciones
-        Double resultado = compraDto.getCompra().getCantidadDeDivisasCompradas() * valorMoneda;
-
-        mav.addObject("pesosEstimados", resultado);
-        mav.addObject("compraDTO", compraDto); // Devolvemos el objeto para mantener los datos en los inputs
+        Double valorMoneda = servicioCompra.obtenerCotizacion(compraDto);
+        compraDto.getCompra().setPrecioPagado(compraDto.getCompra().getCantidadDeDivisasCompradas() * valorMoneda);
+        mav.addObject("compraDTO", compraDto);
 
         return mav;
     }

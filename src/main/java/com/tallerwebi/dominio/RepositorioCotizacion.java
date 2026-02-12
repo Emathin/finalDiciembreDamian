@@ -7,4 +7,6 @@ public interface RepositorioCotizacion {
     Double obtenerCotizacion(TipoMoneda tipoMoneda);
 
     void guardarCotizacion(Cotizacion cotizacion1);
+
+    Cotizacion obtenerCotizacionCompleta(TipoMoneda tipoMoneda);
 }

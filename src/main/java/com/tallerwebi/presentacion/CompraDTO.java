@@ -19,6 +19,7 @@ public class CompraDTO {
     public Compra getCompra() {
         return compra;
     }
+
     public void setCompra(Compra compra) {
         this.compra = compra;
     }
@@ -26,6 +27,7 @@ public class CompraDTO {
     public Cotizacion getCotizacion() {
         return cotizacion;
     }
+
     public void setCotizacion(Cotizacion cotizacion) {
         this.cotizacion = cotizacion;
     }

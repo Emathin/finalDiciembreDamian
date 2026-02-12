@@ -4,14 +4,23 @@
     <meta charset="UTF-8">
     <title>Compra persistida</title>
 </head>
-<body>
-<p>
+<body th:object="${compraDTO}">
+
 <h4>ID compra:</h4>
-<p th:text="${compra.id}"></p>
+<p th:text="*{compra.id}"></p>
+
+<h4>Cantidad de divisas compradas:</h4>
+<p th:text="*{compra.cantidadDeDivisasCompradas}"></p>
+
 <h4>Tipo moneda:</h4>
-<p th:text="${compra.tipoMoneda}"></p>
-<h4>Monto:</h4>
-<p th:text="${compra.cantidad}"></p>
+<p th:text="*{cotizacion.tipoMoneda}"></p>
+
+<h4>Cotización:</h4>
+<p th:text="*{cotizacion.valor}"></p>
+
+<h4>Precio pagado:</h4>
+<p th:text="*{compra.precioPagado}"></p>
+
 <footer>
   <p>Orieta Emmanuel David</p>
   <p>D.N.I.: 34.409.322</p>

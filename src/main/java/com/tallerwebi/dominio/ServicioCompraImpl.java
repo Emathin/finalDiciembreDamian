@@ -21,19 +21,24 @@ public class ServicioCompraImpl implements ServicioCompra {
         this.repositorioCotizacion = repositorioCotizacion;
     }
     @Override
+    @Transactional
     public CompraDTO guardarCompra(CompraDTO compraDTO) {
+
+        Cotizacion cotizacion=repositorioCotizacion.obtenerCotizacionCompleta(compraDTO.getCotizacion().getTipoMoneda());
+
         Compra compra=new Compra();
 
         compra.setCantidadDeDivisasCompradas(compraDTO.getCompra().getCantidadDeDivisasCompradas());
-        compra.setCotizacion(compraDTO.getCotizacion());
+        compra.setCotizacion(cotizacion);
         compra.setPrecioPagado(compraDTO.getCompra().getPrecioPagado());
 
         repositorioCompra.guardarCompra(compra);
 
-        CompraDTO compraDTO=new CompraDTO();
-        compraDTO.setCotizacion();
+        compraDTO.setCompra(compra);
+        compraDTO.getCompra().setPrecioPagado(compra.getPrecioPagado());
+        compraDTO.setCotizacion(compra.getCotizacion());
 
-        return compra;
+        return compraDTO;
     }
 
     @Override

@@ -9,14 +9,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.web.servlet.ModelAndView;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import javax.transaction.Transactional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
+@Transactional
 public class ControladorCompraTest {
 
     @Mock
@@ -46,17 +45,25 @@ public class ControladorCompraTest {
     }
 
     @Test
+
     public void queSePuedaConsultarPesosRequeridosEnBaseALaCotizacionAntesDeComprar(){
         //Preparacion
             Cotizacion cotizacion=new Cotizacion(TipoMoneda.DOLAR,200.00);
+
             Compra compraFormulario=new Compra();
+
             compraFormulario.setCotizacion(cotizacion);
+
             Double cantidadDolaresAComprar=1000.00;
-            compraFormulario.setCantidad(cantidadDolaresAComprar);
+
+            compraFormulario.setCantidadDeDivisasCompradas(cantidadDolaresAComprar);
+
             Double cantidadPesosRequeridos=200000.00;
 
             CompraDTO compraDTO=new CompraDTO();
+
             compraDTO.setCompra(compraFormulario);
+
             compraDTO.setCotizacion(cotizacion);
 
             when(servicioCompra.obtenerCotizacion(compraDTO)).thenReturn(cantidadPesosRequeridos);
