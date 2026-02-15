@@ -9,11 +9,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 @Transactional
 public class ControladorCompraTest {
@@ -25,23 +33,22 @@ public class ControladorCompraTest {
     private ControladorCompra controladorCompra;
 
     @Test
-    public void queSePuedaGuardarUnaCompraYMostrarla(){
-        //Preparacion
-        Compra compraFormulario=new Compra();
-        Cotizacion cotizacionFormulario=new Cotizacion();
-        CompraDTO compraEnBlancoDTO=new CompraDTO();
-        CompraDTO compraPersistidaDTO=new CompraDTO();
-        compraPersistidaDTO.setCotizacion(cotizacionFormulario);
-        compraPersistidaDTO.setCompra(compraFormulario);
+    public void queSePuedaGuardarUnaCompraYDevuelvaMensajeExito() {
+        // Preparación
+        CompraDTO compraFormulario = new CompraDTO();
+        // Simulamos que el servicio guarda correctamente
+        // (Asegúrate de que el servicio devuelva algo si tu lógica lo requiere)
 
-        when(servicioCompra.guardarCompra(compraEnBlancoDTO)).thenReturn(compraPersistidaDTO);
+        // Ejecución
+        ResponseEntity<Map<String, String>> respuesta = controladorCompra.guardarCompra(compraFormulario);
 
-        //Ejecucion
-        ModelAndView mav=controladorCompra.guardarCompra(compraEnBlancoDTO);
+        // Contrastación
+        assertEquals(HttpStatus.OK, respuesta.getStatusCode());
+        assertNotNull(respuesta.getBody());
+        assertEquals("¡La compra se ha guardado exitosamente!", respuesta.getBody().get("mensaje"));
 
-        //Contrastacion
-        assertEquals(compraPersistidaDTO,mav.getModel().get("compra"));
-        assertEquals("compraGuardada",mav.getViewName());
+        // Verificamos que el servicio fue llamado exactamente una vez
+        verify(servicioCompra, times(1)).guardarCompra(compraFormulario);
     }
 
     @Test
@@ -50,23 +57,16 @@ public class ControladorCompraTest {
         //Preparacion
             Cotizacion cotizacion=new Cotizacion(TipoMoneda.DOLAR,200.00);
 
-            Compra compraFormulario=new Compra();
-
-            compraFormulario.setCotizacion(cotizacion);
-
-            Double cantidadDolaresAComprar=1000.00;
-
-            compraFormulario.setCantidadDeDivisasCompradas(cantidadDolaresAComprar);
-
             Double cantidadPesosRequeridos=200000.00;
 
             CompraDTO compraDTO=new CompraDTO();
 
-            compraDTO.setCompra(compraFormulario);
+            compraDTO.setCantidadDeDivisasCompradas(1000.00);
 
-            compraDTO.setCotizacion(cotizacion);
+            compraDTO.setTipoMoneda(cotizacion.getTipoMoneda());
 
             when(servicioCompra.obtenerCotizacion(compraDTO)).thenReturn(cantidadPesosRequeridos);
+
 
         //Ejecucion
         ModelAndView mav=controladorCompra.calcularPesosRequeridos(compraDTO);
@@ -74,5 +74,27 @@ public class ControladorCompraTest {
         //Contrastacion
         assertEquals(mav.getViewName(),"comprar");
         assertEquals(cantidadPesosRequeridos,mav.getModel().get("pesosEstimados"));
+    }
+
+    @Test
+    public void queSePuedanObtenerTodasLasCompras(){
+        //Preparacion
+        CompraDTO compraDTO1=new CompraDTO();
+        CompraDTO compraDTO2=new CompraDTO();
+
+        List<CompraDTO> compraDTOList=new ArrayList<>();
+        compraDTOList.add(compraDTO1);
+        compraDTOList.add(compraDTO2);
+
+        when(servicioCompra.obtenerTodasLasCompras()).thenReturn(compraDTOList);
+        //Ejecucion
+        ModelAndView mav=new ModelAndView("compras");
+        mav.addObject("compras",controladorCompra.obtenerTodasLasCompras());
+
+        //Contrastacion
+        assertEquals("compras",mav.getViewName());
+        assertEquals(2,((java.util.List<CompraDTO>) mav.getModel().get("compras")).size());
+        assertEquals(compraDTO1,((java.util.List<CompraDTO>) mav.getModel().get("compras")).get(0));
+        assertEquals(compraDTO2,((java.util.List<CompraDTO>) mav.getModel().get("compras")).get(1));
     }
 }

@@ -2,8 +2,12 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.presentacion.CompraDTO;
 
+import java.util.List;
+
 public interface ServicioCompra {
-    CompraDTO guardarCompra(CompraDTO compraDTO);
+    Compra guardarCompra(CompraDTO compraDTO);
 
     Double obtenerCotizacion(CompraDTO compraFormularioDTO);
+
+    List<CompraDTO> obtenerTodasLasCompras();
 }

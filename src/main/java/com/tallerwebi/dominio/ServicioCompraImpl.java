@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ServicioCompraImpl implements ServicioCompra {
@@ -22,28 +24,41 @@ public class ServicioCompraImpl implements ServicioCompra {
     }
     @Override
     @Transactional
-    public CompraDTO guardarCompra(CompraDTO compraDTO) {
+    public Compra guardarCompra(CompraDTO compraDTO) {
 
-        Cotizacion cotizacion=repositorioCotizacion.obtenerCotizacionCompleta(compraDTO.getCotizacion().getTipoMoneda());
+        Cotizacion cotizacion=repositorioCotizacion.obtenerCotizacionCompleta(compraDTO.getTipoMoneda());
 
         Compra compra=new Compra();
 
-        compra.setCantidadDeDivisasCompradas(compraDTO.getCompra().getCantidadDeDivisasCompradas());
+        compra.setCantidadDeDivisasCompradas(compraDTO.getCantidadDeDivisasCompradas());
         compra.setCotizacion(cotizacion);
-        compra.setPrecioPagado(compraDTO.getCompra().getPrecioPagado());
+        compra.setPrecioPagado(compraDTO.getPrecioPagado());
 
         repositorioCompra.guardarCompra(compra);
 
-        compraDTO.setCompra(compra);
-        compraDTO.getCompra().setPrecioPagado(compra.getPrecioPagado());
-        compraDTO.setCotizacion(compra.getCotizacion());
-
-        return compraDTO;
+        return compra;
     }
 
     @Override
     @Transactional
     public Double obtenerCotizacion(CompraDTO compraFormularioDTO) {
-        return repositorioCotizacion.obtenerCotizacion(compraFormularioDTO.getCotizacion().getTipoMoneda());
+        return repositorioCotizacion.obtenerCotizacion(compraFormularioDTO.getTipoMoneda());
+    }
+
+    @Override
+    public List<CompraDTO> obtenerTodasLasCompras() {
+        List<Compra> comprasObtenidas=new ArrayList<>();
+        comprasObtenidas=repositorioCompra.obtenerTodasLasCompras();
+        List<CompraDTO> compraDTOList= pasarCompraADTO(comprasObtenidas);
+        return compraDTOList;
+    }
+
+    private List<CompraDTO> pasarCompraADTO(List<Compra> comprasObtenidas) {
+        List<CompraDTO> DTOList=new ArrayList<>();
+        for(Compra c:comprasObtenidas){
+            CompraDTO dto=new CompraDTO();
+            dto.setCompra(comprasObtenidas.getClass());
+
+        }
     }
 }

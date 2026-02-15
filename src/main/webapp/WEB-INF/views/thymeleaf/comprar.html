@@ -31,9 +31,29 @@
         <input type="submit" value="Comprar">
     </form>
 
+<a th:href="@{/verTodasLasCompras}" style="display: inline-block; margin-top: 20px;">Ver todas las compras</a>
+
 <footer>
     <p>Orieta Emmanuel David</p>
     <p>D.N.I.: 34.409.322</p>
 </footer>
 </body>
 </html>
+<script>
+    function enviarFormulario() {
+    const datos = { /* aquí recoges los datos de tus inputs */ };
+
+    fetch('/guardar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+    })
+        .then(response => response.json())
+        .then(data => {
+            // AQUÍ es donde muestras el mensaje sin cambiar de vista
+            alert(data.mensaje);
+            // Opcional: limpiar el formulario o actualizar la tabla de compras
+        })
+        .catch(error => console.error('Error:', error));
+}
+</script>

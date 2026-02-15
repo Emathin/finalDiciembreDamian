@@ -2,35 +2,54 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Compra;
 import com.tallerwebi.dominio.Cotizacion;
+import com.tallerwebi.dominio.TipoMoneda;
 
 public class CompraDTO {
-    private Compra compra;
-    private Cotizacion cotizacion;
 
-    public CompraDTO() {
-        this.compra = new Compra();
-        this.cotizacion = new Cotizacion();
+    private TipoMoneda tipoMoneda;
+    private Double cotizacion;
+    private Double precioPagado;
+    private Double CantidadDeDivisasCompradas;
+
+  public CompraDTO() {
     }
-    public CompraDTO(Compra compra, Cotizacion cotizacion) {
-        this.compra = compra;
+
+    public CompraDTO(TipoMoneda tipoMoneda, Double cotizacion, Double precioPagado, Double cantidadDeDivisasCompradas) {
+        this.tipoMoneda = tipoMoneda;
         this.cotizacion = cotizacion;
+        this.precioPagado = precioPagado;
+        CantidadDeDivisasCompradas = cantidadDeDivisasCompradas;
     }
 
-    public Compra getCompra() {
-        return compra;
+    public TipoMoneda getTipoMoneda() {
+        return tipoMoneda;
     }
 
-    public void setCompra(Compra compra) {
-        this.compra = compra;
+    public void setTipoMoneda(TipoMoneda tipoMoneda) {
+        this.tipoMoneda = tipoMoneda;
     }
 
-    public Cotizacion getCotizacion() {
+    public Double getCotizacion() {
         return cotizacion;
     }
 
-    public void setCotizacion(Cotizacion cotizacion) {
+    public void setCotizacion(Double cotizacion) {
         this.cotizacion = cotizacion;
     }
 
+    public Double getPrecioPagado() {
+        return precioPagado;
+    }
 
+    public void setPrecioPagado(Double precioPagado) {
+        this.precioPagado = precioPagado;
+    }
+
+    public Double getCantidadDeDivisasCompradas() {
+        return CantidadDeDivisasCompradas;
+    }
+
+    public void setCantidadDeDivisasCompradas(Double cantidadDeDivisasCompradas) {
+        CantidadDeDivisasCompradas = cantidadDeDivisasCompradas;
+    }
 }
