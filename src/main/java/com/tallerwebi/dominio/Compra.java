@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 public class Compra {
@@ -13,6 +15,7 @@ public class Compra {
     @JoinColumn(name = "cotizacion_id_cotizacion")
     private Cotizacion cotizacion;
     private Double precioPagado;
+    private LocalDateTime fechaCompra;
 
     public Compra() {
 
@@ -46,5 +49,13 @@ public class Compra {
     }
     public void setPrecioPagado(Double precioPagado) {
         this.precioPagado = precioPagado;
+    }
+
+    public LocalDateTime getFechaCompra() {
+        return fechaCompra;
+    }
+
+    public void setFechaCompra(LocalDateTime fechaCompra) {
+        this.fechaCompra = fechaCompra;
     }
 }

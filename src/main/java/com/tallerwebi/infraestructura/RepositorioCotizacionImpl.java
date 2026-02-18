@@ -14,10 +14,9 @@ import javax.transaction.Transactional;
 @Transactional
 public class RepositorioCotizacionImpl implements RepositorioCotizacion {
 
-    @Autowired
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
-     public RepositorioCotizacionImpl(SessionFactory sessionFactory) {
+    public RepositorioCotizacionImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 

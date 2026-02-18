@@ -33,7 +33,7 @@ public class ServicioCompraTest {
         CompraDTO compraDTO = new CompraDTO();
         Compra compra=new Compra();
 
-        when(repositorioCompra.guardarCompra(compra)).thenReturn(compra);
+        when(repositorioCompra.guardarCompra(any(Compra.class))).thenReturn(compra);
 
         servicioCompra.guardarCompra(compraDTO);
 
@@ -69,7 +69,7 @@ public class ServicioCompraTest {
 
         //Ejecucion
 
-        List<Compra> comprasObtenidas=servicioCompra.obtenerTodasLasCompras();
+        List<CompraDTO> comprasObtenidas=servicioCompra.obtenerTodasLasCompras();
 
         //Contrastacion
         verify(repositorioCompra,times(1)).obtenerTodasLasCompras();

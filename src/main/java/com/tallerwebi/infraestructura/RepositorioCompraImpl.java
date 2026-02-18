@@ -14,27 +14,24 @@ import java.util.List;
 @Repository
 @Transactional
 public class RepositorioCompraImpl implements RepositorioCompra {
-    @Autowired
-    final SessionFactory sessionFactory;
 
-    @Autowired
+    private final SessionFactory sessionFactory;
+
     public RepositorioCompraImpl(SessionFactory sessionFactory) {
-
         this.sessionFactory = sessionFactory;
-
     }
 
     @Override
     public Compra guardarCompra(Compra compra) {
-        Session session=sessionFactory.getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         session.save(compra);
         return compra;
     }
 
     @Override
     public List<Compra> obtenerTodasLasCompras() {
-        return List.of();
+        return sessionFactory.getCurrentSession()
+                .createQuery("FROM Compra", Compra.class)
+                .getResultList();
     }
-
-
 }

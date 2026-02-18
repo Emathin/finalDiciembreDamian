@@ -12,26 +12,26 @@
 
     <form th:action="@{/guardar}" th:object="${compraDTO}" method="post" >
         <label for="cantidad">Divisas a comprar:</label>
-        <input type="number" th:field="*{compra.cantidadDeDivisasCompradas}" id="cantidad" placeholder="Cantidad de divisas a comprar" required><br><br>
+        <input type="number" th:field="*{cantidadDeDivisasCompradas}" id="cantidad" placeholder="Cantidad de divisas a comprar" required><br><br>
         <input type="submit" value="Consultar cotización" th:formaction="@{/consultarCotizacion}"><br>
-        <div th:if="*{compra.precioPagado != null}">
+        <div th:if="*{precioPagado != null}">
             <p style="color: green; font-weight: bold;">
-                Pesos requeridos: <span th:text="*{compra.precioPagado}"></span> ARS
+                Pesos requeridos: <span th:text="*{precioPagado}"></span> ARS
             </p>
-            <input type="hidden" th:field="*{compra.precioPagado}">
+            <input type="hidden" th:field="*{precioPagado}">
         </div>
         <p>Moneda:</p>
-        <input type="radio" th:field="*{cotizacion.tipoMoneda}" value="DOLAR" id="dolar">
+        <input type="radio" th:field="*{tipoMoneda}" value="DOLAR" id="dolar">
         <label for="dolar">DOLAR</label>
         <br>
-        <input type="radio" th:field="*{cotizacion.tipoMoneda}" value="EURO" id="euro">
+        <input type="radio" th:field="*{tipoMoneda}" value="EURO" id="euro">
         <label for="euro">EURO</label>
         <br>
         <br>
         <input type="submit" value="Comprar">
     </form>
 
-<a th:href="@{/verTodasLasCompras}" style="display: inline-block; margin-top: 20px;">Ver todas las compras</a>
+<a th:href="@{/obtenerCompras}" style="display: inline-block; margin-top: 20px;">Ver todas las compras</a>
 
 <footer>
     <p>Orieta Emmanuel David</p>
@@ -39,21 +39,4 @@
 </footer>
 </body>
 </html>
-<script>
-    function enviarFormulario() {
-    const datos = { /* aquí recoges los datos de tus inputs */ };
 
-    fetch('/guardar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(datos)
-    })
-        .then(response => response.json())
-        .then(data => {
-            // AQUÍ es donde muestras el mensaje sin cambiar de vista
-            alert(data.mensaje);
-            // Opcional: limpiar el formulario o actualizar la tabla de compras
-        })
-        .catch(error => console.error('Error:', error));
-}
-</script>

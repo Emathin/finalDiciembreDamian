@@ -14,7 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.transaction.Transactional;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -33,68 +36,80 @@ public class ControladorCompraTest {
     private ControladorCompra controladorCompra;
 
     @Test
-    public void queSePuedaGuardarUnaCompraYDevuelvaMensajeExito() {
-        // Preparación
+    public void queSePuedaGuardarUnaCompra() {
+
+        //Preparacion
         CompraDTO compraFormulario = new CompraDTO();
-        // Simulamos que el servicio guarda correctamente
-        // (Asegúrate de que el servicio devuelva algo si tu lógica lo requiere)
 
-        // Ejecución
-        ResponseEntity<Map<String, String>> respuesta = controladorCompra.guardarCompra(compraFormulario);
+        //Ejecucion
+        controladorCompra.guardarCompra(compraFormulario);
 
-        // Contrastación
-        assertEquals(HttpStatus.OK, respuesta.getStatusCode());
-        assertNotNull(respuesta.getBody());
-        assertEquals("¡La compra se ha guardado exitosamente!", respuesta.getBody().get("mensaje"));
-
-        // Verificamos que el servicio fue llamado exactamente una vez
+        //Contrastacion
         verify(servicioCompra, times(1)).guardarCompra(compraFormulario);
     }
 
     @Test
+    public void queSePuedaConsultarPesosRequeridosEnBaseALaCotizacionAntesDeComprar() {
 
-    public void queSePuedaConsultarPesosRequeridosEnBaseALaCotizacionAntesDeComprar(){
         //Preparacion
-            Cotizacion cotizacion=new Cotizacion(TipoMoneda.DOLAR,200.00);
-
-            Double cantidadPesosRequeridos=200000.00;
-
-            CompraDTO compraDTO=new CompraDTO();
-
-            compraDTO.setCantidadDeDivisasCompradas(1000.00);
-
-            compraDTO.setTipoMoneda(cotizacion.getTipoMoneda());
-
-            when(servicioCompra.obtenerCotizacion(compraDTO)).thenReturn(cantidadPesosRequeridos);
-
+        Cotizacion cotizacion = new Cotizacion(TipoMoneda.DOLAR, 200.00);
+        Double cantidadPesosRequeridos = 200000.00;
+        CompraDTO compraDTO = new CompraDTO();
+        compraDTO.setCantidadDeDivisasCompradas(1000.00);
+        compraDTO.setTipoMoneda(cotizacion.getTipoMoneda());
+        when(servicioCompra.obtenerCotizacion(compraDTO)).thenReturn(cantidadPesosRequeridos);
 
         //Ejecucion
-        ModelAndView mav=controladorCompra.calcularPesosRequeridos(compraDTO);
+        ModelAndView mav = controladorCompra.calcularPesosRequeridos(compraDTO);
 
         //Contrastacion
-        assertEquals(mav.getViewName(),"comprar");
-        assertEquals(cantidadPesosRequeridos,mav.getModel().get("pesosEstimados"));
+        assertEquals("comprar", mav.getViewName());
+        assertEquals(cantidadPesosRequeridos, mav.getModel().get("pesosEstimados"));
     }
 
     @Test
-    public void queSePuedanObtenerTodasLasCompras(){
-        //Preparacion
-        CompraDTO compraDTO1=new CompraDTO();
-        CompraDTO compraDTO2=new CompraDTO();
+    public void queSePuedaConsultarLaCotizacionDeUnaMoneda() {
 
-        List<CompraDTO> compraDTOList=new ArrayList<>();
+        //Preparacion
+        CompraDTO compraDTO = new CompraDTO();
+
+        compraDTO.setCotizacion(300.00);
+        compraDTO.setTipoMoneda(TipoMoneda.DOLAR);
+        compraDTO.setCantidadDeDivisasCompradas(1000.00);
+        compraDTO.setFechaCompra(LocalDateTime.now());
+
+        when(servicioCompra.obtenerCotizacion(compraDTO)).thenReturn(300.00);
+
+        //Ejecucion
+        ModelAndView mav = controladorCompra.consultar(compraDTO);
+
+        //Contrastacion
+        assertEquals("comprar", mav.getViewName());
+        assertEquals(300.00, ((CompraDTO) mav.getModel().get("compraDTO")).getCotizacion());
+    }
+
+    @Test
+    public void queSePuedanObtenerTodasLasCompras() {
+
+        //Preparacion
+        CompraDTO compraDTO1 = new CompraDTO();
+        CompraDTO compraDTO2 = new CompraDTO();
+
+        List<CompraDTO> compraDTOList = new ArrayList<>();
         compraDTOList.add(compraDTO1);
         compraDTOList.add(compraDTO2);
 
         when(servicioCompra.obtenerTodasLasCompras()).thenReturn(compraDTOList);
+
         //Ejecucion
-        ModelAndView mav=new ModelAndView("compras");
-        mav.addObject("compras",controladorCompra.obtenerTodasLasCompras());
+        ModelAndView mav = controladorCompra.obtenerTodasLasCompras();
 
         //Contrastacion
-        assertEquals("compras",mav.getViewName());
-        assertEquals(2,((java.util.List<CompraDTO>) mav.getModel().get("compras")).size());
-        assertEquals(compraDTO1,((java.util.List<CompraDTO>) mav.getModel().get("compras")).get(0));
-        assertEquals(compraDTO2,((java.util.List<CompraDTO>) mav.getModel().get("compras")).get(1));
+        assertEquals("listadoDeCompras", mav.getViewName());
+        assertEquals(2, ((java.util.List<CompraDTO>) mav.getModel().get("compras")).size());
+        assertEquals(compraDTO1, ((java.util.List<CompraDTO>) mav.getModel().get("compras")).get(0));
+        assertEquals(compraDTO2, ((java.util.List<CompraDTO>) mav.getModel().get("compras")).get(1));
     }
+
+
 }
