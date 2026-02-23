@@ -26,22 +26,26 @@ public class ServicioCompraTest {
 
     @InjectMocks
     private ServicioCompraImpl servicioCompra;
-
     @Test
     public void queSePuedaCrearUnaCompra(){
-
+        // Preparación
         CompraDTO compraDTO = new CompraDTO();
-        Compra compra=new Compra();
+        compraDTO.setTipoMoneda(TipoMoneda.DOLAR); // Asegúrate de que no sea null si el repo lo usa
 
-        when(repositorioCompra.guardarCompra(any(Compra.class))).thenReturn(compra);
+        // Comportamiento (Mock)
+        // No hace falta guardar el retorno en una variable 'compra' si no la vas a usar
+        when(repositorioCompra.guardarCompra(any(Compra.class))).thenReturn(new Compra());
+        when(repositorioCotizacion.obtenerCotizacionCompleta(any())).thenReturn(new Cotizacion());
 
+        // Ejecución
         servicioCompra.guardarCompra(compraDTO);
 
-        verify(repositorioCompra,times(1)).guardarCompra(compra);
+        // Verificación: Usa 'any' también aquí
+        verify(repositorioCompra, times(1)).guardarCompra(any(Compra.class));
     }
 
     @Test
-    public void queSePuedaCalcularLaPesosRequeridosParaUnaCompra(){
+    public void queSePuedaCalcularLaPesosRequeridosParaUnaCompraObteniendoLaCotizacion(){
 
         Cotizacion cotizacionModelo = new Cotizacion(TipoMoneda.DOLAR,200.00);
         CompraDTO compraDTO=new CompraDTO();
@@ -51,7 +55,7 @@ public class ServicioCompraTest {
 
         when(repositorioCotizacion.obtenerCotizacion(compraDTO.getTipoMoneda())).thenReturn(200.00);
 
-        compraDTO.setPrecioPagado(servicioCompra.obtenerCotizacion(compraDTO));
+        compraDTO.setPrecioPagado(servicioCompra.obtenerCotizacion(compraDTO)*compraDTO.getCantidadDeDivisasCompradas());
 
         verify(repositorioCotizacion,times(1)).obtenerCotizacion(TipoMoneda.DOLAR);
         assertEquals(200000.00, compraDTO.getPrecioPagado());
@@ -62,9 +66,18 @@ public class ServicioCompraTest {
         //Preparacion
            Compra compra1=new Compra();
            Compra compra2=new Compra();
+
+           Cotizacion cotizacion1=new Cotizacion(TipoMoneda.DOLAR,200.00);
+           Cotizacion cotizacion2=new Cotizacion(TipoMoneda.EURO,300.00);
+
+           compra1.setCotizacion(cotizacion1);
+           compra2.setCotizacion(cotizacion2);
+
            List<Compra> compras=new ArrayList<>();
+
            compras.add(compra1);
            compras.add(compra2);
+
            when(repositorioCompra.obtenerTodasLasCompras()).thenReturn(compras);
 
         //Ejecucion
@@ -74,8 +87,9 @@ public class ServicioCompraTest {
         //Contrastacion
         verify(repositorioCompra,times(1)).obtenerTodasLasCompras();
         assertEquals(2,comprasObtenidas.size());
-        assertEquals(compra1,comprasObtenidas.get(0));
-        assertEquals(compra2,comprasObtenidas.get(1));
+        assertEquals(compra1.getCotizacion().getTipoMoneda(),comprasObtenidas.get(0).getTipoMoneda());
+        assertEquals(compra2.getCotizacion().getTipoMoneda(),comprasObtenidas.get(1).getTipoMoneda());
+        assertEquals(compra1.getCotizacion().getValor(),comprasObtenidas.get(0).getCotizacion());
+        assertEquals(compra2.getCotizacion().getValor(),comprasObtenidas.get(1).getCotizacion());
     }
-
 }

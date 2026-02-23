@@ -23,7 +23,7 @@ public class ServicioCompraImpl implements ServicioCompra {
 
     @Override
     @Transactional
-    public Compra guardarCompra(CompraDTO compraDTO) {
+    public void guardarCompra(CompraDTO compraDTO) {
 
         Cotizacion cotizacion = repositorioCotizacion.obtenerCotizacionCompleta(compraDTO.getTipoMoneda());
 
@@ -35,13 +35,11 @@ public class ServicioCompraImpl implements ServicioCompra {
         compra.setFechaCompra(compraDTO.getFechaCompra());
 
         repositorioCompra.guardarCompra(compra);
-
-        return compra;
     }
 
     @Override
     @Transactional
-    public Double obtenerCotizacion(CompraDTO compraFormularioDTO) {
+    public Double   obtenerCotizacion(CompraDTO compraFormularioDTO) {
         return repositorioCotizacion.obtenerCotizacion(compraFormularioDTO.getTipoMoneda());
     }
 
