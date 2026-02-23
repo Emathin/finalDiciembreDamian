@@ -35,15 +35,44 @@ public class RepositorioCompraTest {
 
     @Test
     public void testQueSePuedaGuardarUnaCompra() {
-        Compra compra1=new Compra();
-        Cotizacion cotizacion1=new Cotizacion(TipoMoneda.DOLAR, 100.0);
+        Compra compra1 = new Compra();
+        Cotizacion cotizacion1 = new Cotizacion(TipoMoneda.DOLAR, 100.0);
         compra1.setCotizacion(cotizacion1);
 
-        Compra guardada=repositorioCompra.guardarCompra(compra1);
+        Compra guardada = repositorioCompra.guardarCompra(compra1);
 
         assertThat(guardada.getId(), org.hamcrest.Matchers.notNullValue());
         Assertions.assertEquals(TipoMoneda.DOLAR, guardada.getCotizacion().getTipoMoneda());
         Assertions.assertEquals(100.0, guardada.getCotizacion().getValor());
     }
 
+    @Test
+    public void queSePuedaObtenerUnaCotizacionPorElTipoDeMoneda() {
+        Cotizacion cotizacion1 = new Cotizacion(TipoMoneda.EURO, 150.0);
+        repositorioCotizacion.guardarCotizacion(cotizacion1);
+
+        Double valorObtenido = repositorioCotizacion.obtenerCotizacion(TipoMoneda.EURO);
+
+        Assertions.assertEquals(150.0, valorObtenido);
+
+    }
+
+    @Test
+    public void queSePuedaObtenerUnaCotizacionCompletaPorElTipoDeMoneda() {
+        Cotizacion cotizacion1 = new Cotizacion(TipoMoneda.EURO, 50.0);
+        Cotizacion cotizacion2 = new Cotizacion(TipoMoneda.DOLAR, 100.0);
+        repositorioCotizacion.guardarCotizacion(cotizacion1);
+        repositorioCotizacion.guardarCotizacion(cotizacion2);
+
+        Cotizacion cotizacionObtenida = repositorioCotizacion.obtenerCotizacionCompleta(TipoMoneda.EURO);
+        Cotizacion cotizacionObtenida2 = repositorioCotizacion.obtenerCotizacionCompleta(TipoMoneda.DOLAR);
+
+        assertThat(cotizacionObtenida.getIdCotizacion(), org.hamcrest.Matchers.notNullValue());
+        assertThat(cotizacionObtenida2.getIdCotizacion(), org.hamcrest.Matchers.notNullValue());
+        Assertions.assertEquals(TipoMoneda.EURO, cotizacionObtenida.getTipoMoneda());
+        Assertions.assertEquals(50.0, cotizacionObtenida.getValor());
+        Assertions.assertEquals(TipoMoneda.DOLAR, cotizacionObtenida2.getTipoMoneda());
+        Assertions.assertEquals(100.0, cotizacionObtenida2.getValor());
+
+    }
 }

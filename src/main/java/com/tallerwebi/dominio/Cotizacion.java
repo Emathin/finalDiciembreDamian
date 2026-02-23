@@ -33,6 +33,12 @@ public class Cotizacion {
     public void setValor(Double valor) {
         this.valor = valor;
     }
+
+    public Long getIdCotizacion() {return idCotizacion;}
+
+        public void setIdCotizacion(Long idCotizacion) {
+            this.idCotizacion = idCotizacion;
+        }
 }
 
 
