@@ -34,4 +34,12 @@ public class RepositorioCompraImpl implements RepositorioCompra {
                 .createQuery("FROM Compra", Compra.class)
                 .getResultList();
     }
+
+    @Override
+    public List<Compra> obtenerComprasPorMoneda(TipoMoneda tipoMoneda) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("FROM Compra c WHERE c.cotizacion.tipoMoneda = :tipo", Compra.class)
+                .setParameter("tipo", tipoMoneda)
+                .getResultList();
+    }
 }

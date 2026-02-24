@@ -49,6 +49,11 @@ public class ServicioCompraImpl implements ServicioCompra {
         return pasarCompraADTO(comprasObtenidas);
     }
 
+    @Override
+    public List<CompraDTO> obtenerComprasPorMoneda(TipoMoneda tipoMoneda) {
+        return pasarCompraADTO(repositorioCompra.obtenerComprasPorMoneda(tipoMoneda));
+    }
+
     private List<CompraDTO> pasarCompraADTO(List<Compra> comprasObtenidas) {
         List<CompraDTO> DTOList = new ArrayList<>();
         for (Compra c : comprasObtenidas) {

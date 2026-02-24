@@ -13,7 +13,7 @@
 
 <header>
   <div>
-    <label for="cotizacionActual"><strong>Cotización Actual (ARS): </strong></label>
+    <label for="cotizacionActual"><strong>Cotizaci&oacute;n Actual (ARS): </strong></label>
     <input type="number" id="cotizacionActual" value="1000" step="0.01" oninput="calcularDiferencias()">
     <small>(Edita este valor para ver ganancias/pérdidas)</small>
   </div>
@@ -22,8 +22,8 @@
 
   <div>
     <strong>Filtrar por: </strong>
-    <a th:href="@{/historial(moneda='USD')}">Dólares (USD)</a> |
-    <a th:href="@{/historial(moneda='EUR')}">Euros (EUR)</a> |
+    <a th:href="@{/historial(moneda='DOLAR')}">D&oacute;lares (USD)</a> |
+    <a th:href="@{/historial(moneda='EURO')}">Euros (EUR)</a> |
     <a th:href="@{/historial}">Ver Todas</a>
   </div>
 </header>
@@ -33,10 +33,10 @@
   <tr>
     <th>Moneda</th>
     <th>Cantidad Comprada</th>
-    <th>Cotización histórica</th>
+    <th>Cotizaci&oacute;n hist&oacute;rica</th>
     <th>Precio Pagado (ARS)</th>
     <th>Fecha de compra</th>
-    <th>Ganancia/Pérdida (ARS)</th>
+    <th>Ganancia/P&eacute;rdida (ARS)</th>
   </tr>
   </thead>
   <tbody>
@@ -52,7 +52,7 @@
 </table>
 
 <br>
-<a th:href="@{/panel-principal}">Volver a comprar</a>
+<a th:href="@{/comprar}">Volver a comprar</a>
 
 <script>
   function calcularDiferencias() {

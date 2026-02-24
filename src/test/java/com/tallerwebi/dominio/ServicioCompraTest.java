@@ -13,6 +13,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -91,5 +92,65 @@ public class ServicioCompraTest {
         assertEquals(compra2.getCotizacion().getTipoMoneda(),comprasObtenidas.get(1).getTipoMoneda());
         assertEquals(compra1.getCotizacion().getValor(),comprasObtenidas.get(0).getCotizacion());
         assertEquals(compra2.getCotizacion().getValor(),comprasObtenidas.get(1).getCotizacion());
+    }
+
+    @Test
+    public void queSePuedanObtenerComprasFiltradasPorTipoDeMoneda(){
+        //Preparacion
+        Compra compra1=new Compra();
+        Compra compra2=new Compra();
+
+        Cotizacion cotizacion1=new Cotizacion(TipoMoneda.DOLAR,200.00);
+        Cotizacion cotizacion2=new Cotizacion(TipoMoneda.EURO,300.00);
+
+        compra1.setCotizacion(cotizacion1);
+        compra2.setCotizacion(cotizacion2);
+
+        List<Compra> compras=new ArrayList<>();
+
+        compras.add(compra1);
+
+        when(repositorioCompra.obtenerComprasPorMoneda(TipoMoneda.DOLAR)).thenReturn(compras);
+
+        //Ejecucion
+
+        List<CompraDTO> comprasObtenidas=servicioCompra.obtenerComprasPorMoneda(TipoMoneda.DOLAR);
+
+        //Contrastacion
+        verify(repositorioCompra,times(1)).obtenerComprasPorMoneda(TipoMoneda.DOLAR);
+        assertEquals(1,comprasObtenidas.size());
+        assertEquals(compra1.getCotizacion().getTipoMoneda(),comprasObtenidas.get(0).getTipoMoneda());
+        assertEquals(compra1.getCotizacion().getValor(),comprasObtenidas.get(0).getCotizacion());
+    }
+    @Test
+    public void queAlPedirComprasPorMonedaElServicioDevuelvaLaListaMapeadaCorrectamente() {
+        // Preparacion
+        // Solo creamos lo que el Mock va a devolver para evitar ruido
+        Compra compraDolar = new Compra();
+        Cotizacion cotizacionDolar = new Cotizacion(TipoMoneda.DOLAR, 200.00);
+        compraDolar.setCotizacion(cotizacionDolar);
+        compraDolar.setCantidadDeDivisasCompradas(100.0);
+        compraDolar.setPrecioPagado(20000.0);
+
+        List<Compra> comprasDeLaDb = List.of(compraDolar);
+
+        // Configuramos el mock para que responda solo a DOLAR
+        when(repositorioCompra.obtenerComprasPorMoneda(TipoMoneda.DOLAR)).thenReturn(comprasDeLaDb);
+
+        // Ejecucion
+        List<CompraDTO> resultados = servicioCompra.obtenerComprasPorMoneda(TipoMoneda.DOLAR);
+
+        // Contrastacion
+        // 1. Verificamos que se llamó al repo con el parámetro EXACTO
+        verify(repositorioCompra, times(1)).obtenerComprasPorMoneda(TipoMoneda.DOLAR);
+
+        // 2. Verificamos que la transformación a DTO fue exitosa (Mapeo)
+        assertNotNull(resultados);
+        assertEquals(1, resultados.size());
+
+        CompraDTO dto = resultados.get(0);
+        assertEquals(TipoMoneda.DOLAR, dto.getTipoMoneda());
+        assertEquals(200.00, dto.getCotizacion());
+        assertEquals(100.0, dto.getCantidadDeDivisasCompradas());
     }
 }

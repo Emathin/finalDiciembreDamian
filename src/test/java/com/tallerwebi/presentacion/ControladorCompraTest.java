@@ -111,5 +111,61 @@ public class ControladorCompraTest {
         assertEquals(compraDTO2, ((java.util.List<CompraDTO>) mav.getModel().get("compras")).get(1));
     }
 
+    @Test
+    public void queSePuedaFiltrarSegunTipoDeMonedaEnElHitorialDeCompras(){
 
+        CompraDTO compraDTO = new CompraDTO();
+        CompraDTO compraDTO1 = new CompraDTO();
+
+        compraDTO.setTipoMoneda(TipoMoneda.DOLAR);
+        compraDTO.setCantidadDeDivisasCompradas(1000.00);
+        compraDTO.setCotizacion(200.00);
+
+        compraDTO1.setTipoMoneda(TipoMoneda.EURO);
+        compraDTO1.setCantidadDeDivisasCompradas(1000.00);
+        compraDTO1.setCotizacion(300.00);
+
+        when(servicioCompra.obtenerComprasPorMoneda(TipoMoneda.DOLAR)).thenReturn(List.of(compraDTO));
+
+        ModelAndView mav= controladorCompra.historialDeCompras(TipoMoneda.DOLAR);
+
+        List<CompraDTO> compras=(List<CompraDTO>)mav.getModel().get("compras");
+
+        assertEquals("listadoDeCompras", mav.getViewName());
+        assertEquals(1, ((java.util.List<CompraDTO>) mav.getModel().get("compras")).size());
+        assertEquals(compraDTO.getTipoMoneda(), ((java.util.List<CompraDTO>) mav.getModel().get("compras")).get(0).getTipoMoneda());
+        assertEquals(1000.00, ((java.util.List<CompraDTO>) mav.getModel().get("compras")).get(0).getCantidadDeDivisasCompradas());
+        assertEquals(200.00, ((java.util.List<CompraDTO>) mav.getModel().get("compras")).get(0).getCotizacion());
+
+    }
+
+    //Sugerencia de Gemini para el test.
+    @Test
+    public void queSePuedaFiltrarSegunTipoDeMonedaEnElHistorialDeCompras() {
+        // Preparación (Given)
+        CompraDTO compraDolar = new CompraDTO();
+        compraDolar.setTipoMoneda(TipoMoneda.DOLAR);
+        compraDolar.setCantidadDeDivisasCompradas(1000.00);
+        compraDolar.setCotizacion(200.00);
+
+        // Solo configuramos el mock para la moneda que vamos a pedir
+        when(servicioCompra.obtenerComprasPorMoneda(TipoMoneda.DOLAR)).thenReturn(List.of(compraDolar));
+
+        // Ejecución (When)
+        ModelAndView mav = controladorCompra.historialDeCompras(TipoMoneda.DOLAR);
+
+        // Contrastación (Then)
+        assertEquals("listadoDeCompras", mav.getViewName());
+
+        // Extraemos la lista una sola vez para mejorar la legibilidad
+        List<CompraDTO> comprasEnModelo = (List<CompraDTO>) mav.getModel().get("compras");
+
+        assertNotNull(comprasEnModelo);
+        assertEquals(1, comprasEnModelo.size());
+        assertEquals(TipoMoneda.DOLAR, comprasEnModelo.get(0).getTipoMoneda());
+        assertEquals(200.00, comprasEnModelo.get(0).getCotizacion());
+
+        // Verificación adicional: ¿Realmente el controlador llamó al servicio?
+        verify(servicioCompra, times(1)).obtenerComprasPorMoneda(TipoMoneda.DOLAR);
+    }
 }

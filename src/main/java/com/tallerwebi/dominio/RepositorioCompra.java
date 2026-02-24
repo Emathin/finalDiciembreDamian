@@ -8,4 +8,6 @@ public interface RepositorioCompra {
     Compra guardarCompra(Compra compra);
 
     List<Compra> obtenerTodasLasCompras();
+
+    List<Compra> obtenerComprasPorMoneda(TipoMoneda tipoMoneda);
 }

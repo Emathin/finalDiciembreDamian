@@ -64,5 +64,16 @@ public class ControladorCompra {
         return mav;
     }
 
-
+    @GetMapping("/historial")
+    public ModelAndView historialDeCompras(@RequestParam (required=false, name = "moneda") TipoMoneda tipoMoneda) {
+        ModelAndView mav = new ModelAndView("listadoDeCompras");
+        List<CompraDTO> compras;
+        if (tipoMoneda != null) {
+            compras = servicioCompra.obtenerComprasPorMoneda(tipoMoneda);
+        } else {
+            compras = servicioCompra.obtenerTodasLasCompras();
+        }
+        mav.addObject("compras", compras);
+        return mav;
+    }
 }

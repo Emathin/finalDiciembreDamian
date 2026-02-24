@@ -13,7 +13,7 @@
     <form th:action="@{/guardar}" th:object="${compraDTO}" method="post" >
         <label for="cantidad">Divisas a comprar:</label>
         <input type="number" th:field="*{cantidadDeDivisasCompradas}" id="cantidad" placeholder="Cantidad de divisas a comprar" required><br><br>
-        <input type="submit" value="Consultar cotización" th:formaction="@{/consultarCotizacion}"><br>
+        <input type="submit" value="Consultar cotizaci&oacute;n" th:formaction="@{/consultarCotizacion}"><br>
         <div th:if="*{precioPagado != null}">
             <p style="color: green; font-weight: bold;">
                 Pesos requeridos: <span th:text="*{precioPagado}"></span> ARS

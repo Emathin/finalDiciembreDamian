@@ -10,4 +10,6 @@ public interface ServicioCompra {
     Double obtenerCotizacion(CompraDTO compraFormularioDTO);
 
     List<CompraDTO> obtenerTodasLasCompras();
+
+    List<CompraDTO> obtenerComprasPorMoneda(TipoMoneda tipoMoneda);
 }

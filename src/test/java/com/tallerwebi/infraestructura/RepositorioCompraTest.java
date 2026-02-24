@@ -15,6 +15,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.transaction.Transactional;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -74,5 +76,24 @@ public class RepositorioCompraTest {
         Assertions.assertEquals(TipoMoneda.DOLAR, cotizacionObtenida2.getTipoMoneda());
         Assertions.assertEquals(100.0, cotizacionObtenida2.getValor());
 
+    }
+
+    @Test
+    public void queSePuedaObtenerUnaCompraPorTipoDeMoneda(){
+
+        //Prepa
+        Cotizacion cotizacion1=new Cotizacion(TipoMoneda.EURO,100.0);
+        repositorioCotizacion.guardarCotizacion(cotizacion1);
+        Compra compra1=new Compra();
+        compra1.setCotizacion(cotizacion1);
+        repositorioCompra.guardarCompra(compra1);
+
+        //Eje
+        List<Compra> comprasObtenidas=repositorioCompra.obtenerComprasPorMoneda(TipoMoneda.EURO);
+
+        //Contr
+        assertThat(comprasObtenidas.get(0).getId(), org.hamcrest.Matchers.notNullValue());
+        Assertions.assertEquals(TipoMoneda.EURO, comprasObtenidas.get(0).getCotizacion().getTipoMoneda());
+        Assertions.assertEquals(100.0, comprasObtenidas.get(0).getCotizacion().getValor());
     }
 }
